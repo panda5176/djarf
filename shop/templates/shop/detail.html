@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Djarf Product</title>
+</head>
+
+<body>
+    <h1>{{ product.name }}</h1>
+    <ul>
+        {% for comment in product.comment_set.all %}
+        <li>{{ comment.text }}</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>

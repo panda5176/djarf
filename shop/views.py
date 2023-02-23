@@ -1,5 +1,5 @@
-from django.shortcuts import render
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
 
 from .models import Product
 
@@ -14,7 +14,8 @@ def hello(request):
 
 
 def detail(request, product_id):
-    return HttpResponse()
+    product = get_object_or_404(Product, pk=product_id)
+    return render(request, "shop/detail.html", {"product": product})
 
 
 def like(request, product_id):

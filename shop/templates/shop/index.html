@@ -10,7 +10,9 @@
     {% if latest_product_list %}
     <ul>
         {% for product in latest_product_list %}
-        <li><a href="/product/{{ product.id }}/">{{ product.product_text }}</a>
+        <li>
+            <!-- <a href="/product/{{ product.id }}/">{{ product.name }}</a> -->
+            <a href="{% url 'shop:detail' product.id %}">{{ product.name }}</a>
         </li>
         {% endfor %}
     </ul>
