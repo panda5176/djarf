@@ -10,7 +10,7 @@ $ git clone https://github.com/panda5176/djarf
 $ cd djarf
 $ python3 -m venv venv
 $ source venv/bin/activate
-$ pip install -r requirements.txt
+$ python3 -m pip install -r requirements.txt
 $ python3 manage.py migrate
 $ python3 manage.py createsuperuser  # admin:password123
 $ python3 manage.py runserver
