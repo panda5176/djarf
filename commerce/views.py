@@ -15,7 +15,7 @@ from commerce.serializers import (
 @api_view(["GET"])
 def api_root(request, format=None):
     return Response(
-        {"carts": reverse("carts-list", request=request, format=format)},
+        {"carts": reverse("cart-list", request=request, format=format)},
         {
             "categories": reverse(
                 "category-list", request=request, format=format
