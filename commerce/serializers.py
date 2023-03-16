@@ -1,32 +1,39 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from commerce.models import Cart, Category, Order, Product, Tag
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ["url", "id", "cart", "orders"]
 
 
 class CartSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Cart
-        fields = "__all__"
+        fields = ["url", "id", "customer", "product", "created", "quantity"]
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
-        fields = "__all__"
+        fields = ["url", "id", "title", "products"]
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Order
-        fields = "__all__"
+        fields = ["url", "id", "customer", "created"]
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = ["url", "id", "category", "tag", "title", "created", "price"]
 
 
 class TagSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Tag
-        fields = "__all__"
+        fields = ["url", "id", "title", "products"]
