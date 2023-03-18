@@ -2,7 +2,9 @@ from django.db import models
 
 
 class Cart(models.Model):
-    customer = models.OneToOneField("auth.User", on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, related_name="carts"
+    )
     product = models.ForeignKey(
         "Product", on_delete=models.CASCADE, related_name="carts"
     )

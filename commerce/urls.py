@@ -5,6 +5,7 @@ from commerce.views import (
     CartViewSet,
     CategoryViewSet,
     OrderViewSet,
+    Order2ProductViewSet,
     ProductViewSet,
     TagViewSet,
 )
@@ -14,6 +15,9 @@ router.register("users", UserViewSet, basename="user")
 router.register("carts", CartViewSet, basename="cart")
 router.register("categories", CategoryViewSet, basename="category")
 router.register("orders", OrderViewSet, basename="order")
+router.register(
+    "order2products", Order2ProductViewSet, basename="order2product"
+)
 router.register("products", ProductViewSet, basename="product")
 router.register("tags", TagViewSet, basename="tag")
 
