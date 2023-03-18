@@ -72,9 +72,7 @@ class Product(models.Model):
         related_name="products",
         null=True,
     )
-    tag = models.ForeignKey(
-        "Tag", on_delete=models.SET_NULL, related_name="products", null=True
-    )
+    tag = models.ManyToManyField("Tag", related_name="products", blank=True)
     title = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     price = models.PositiveIntegerField(db_index=True)
