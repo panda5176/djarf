@@ -25,7 +25,7 @@ class CategorySerializer(HyperlinkedModelSerializer):
 class OrderSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Order
-        fields = ["url", "id", "customer", "created"]
+        fields = ["url", "id", "customer", "created", "order2products"]
         read_only_fields = ["order2products"]
 
     def create(self, validated_data):
