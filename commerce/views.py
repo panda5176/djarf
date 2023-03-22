@@ -32,6 +32,7 @@ class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
 
     def get_queryset(self):
+        """Overriding to pass User for request data to Order view."""
         if self.action == "create":
             return User.objects.all()
         return super().get_queryset()

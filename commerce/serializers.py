@@ -28,7 +28,12 @@ class OrderSerializer(HyperlinkedModelSerializer):
         fields = ["url", "id", "customer", "created", "order2products"]
         read_only_fields = ["order2products"]
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> Order:
+        """Creating Order creates Order2Products and deletes Cart.
+
+        Creating Order from customer creates Order2Products from Cart items of \
+            customer and deletes Cart.
+        """
         order = Order.objects.create(**validated_data)
         customer: User = validated_data["customer"]
         for cart in customer.carts.all():
