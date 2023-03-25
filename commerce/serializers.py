@@ -1,6 +1,9 @@
+import logging
 from django.contrib.auth.models import User
 from rest_framework.serializers import HyperlinkedModelSerializer
 from commerce.models import Cart, Category, Order, Order2Product, Product, Tag
+
+LOGGER = logging.getLogger(__name__)
 
 
 class UserSerializer(HyperlinkedModelSerializer):

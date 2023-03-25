@@ -1,3 +1,4 @@
+import logging
 from django.contrib.auth.models import User
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from commerce.models import Cart, Category, Order, Order2Product, Product, Tag
@@ -10,6 +11,8 @@ from commerce.serializers import (
     ProductSerializer,
     TagSerializer,
 )
+
+LOGGER = logging.getLogger(__name__)
 
 
 class UserViewSet(ReadOnlyModelViewSet):

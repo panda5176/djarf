@@ -10,7 +10,7 @@ from commerce.models import Category, Product, Tag
 
 class ProductTests(APITestCase):
     def setUp(self):
-        product1 = Product.objects.create(title="product1", price=1)
+        _ = Product.objects.create(title="product1", price=1)
         _ = Category.objects.create(title="category")
         _ = Tag.objects.create(title="tag")
 

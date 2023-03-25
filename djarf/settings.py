@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+from datetime import date
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -130,4 +130,42 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "main": {
+            "()": "django.utils.log.ServerFormatter",
+            "format": (
+                "{asctime}\t{levelname}\t{process}\t{thread}"
+                "\t{module}\t{funcName}\t{message}"
+            ),
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "main",
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "formatter": "main",
+            "filename": BASE_DIR / "logs" / f"{date.today()}.log",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+        },
+        "commerce": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+        },
+    },
 }
