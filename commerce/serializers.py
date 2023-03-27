@@ -56,7 +56,19 @@ class Order2ProductSerializer(HyperlinkedModelSerializer):
 class ProductSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Product
-        fields = ["url", "id", "category", "tag", "title", "created", "price"]
+        fields = [
+            "url",
+            "id",
+            "vendor",
+            "category",
+            "tag",
+            "title",
+            "created",
+            "price",
+            "likes",
+            "dislikes",
+            "description",
+        ]
 
 
 class TagSerializer(HyperlinkedModelSerializer):

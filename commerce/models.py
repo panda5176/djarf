@@ -34,7 +34,7 @@ class Category(models.Model):
 
 class Order(models.Model):
     customer = models.ForeignKey(
-        "auth.User", on_delete=models.SET_NULL, related_name="orders", null=True
+        "auth.User", on_delete=models.CASCADE, related_name="orders"
     )
     created = models.DateTimeField(auto_now_add=True, db_index=True)
 
@@ -48,10 +48,7 @@ class Order2Product(models.Model):
         "Order", on_delete=models.CASCADE, related_name="order2products"
     )
     product = models.ForeignKey(
-        "Product",
-        on_delete=models.SET_NULL,
-        related_name="order2products",
-        null=True,
+        "Product", on_delete=models.CASCADE, related_name="order2products"
     )
     quantity = models.PositiveSmallIntegerField(default=1)
 
@@ -66,16 +63,19 @@ class Order2Product(models.Model):
 
 
 class Product(models.Model):
+    vendor = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, related_name="products"
+    )
     category = models.ForeignKey(
-        "Category",
-        on_delete=models.SET_NULL,
-        related_name="products",
-        null=True,
+        "Category", on_delete=models.CASCADE, related_name="products"
     )
     tag = models.ManyToManyField("Tag", related_name="products", blank=True)
     title = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     price = models.PositiveIntegerField(db_index=True)
+    likes = models.PositiveSmallIntegerField(db_index=True, default=0)
+    dislikes = models.PositiveSmallIntegerField(db_index=True, default=0)
+    description = models.TextField(default="", blank=True)
 
     def __str__(self):
         return self.title

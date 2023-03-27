@@ -5,22 +5,28 @@ from rest_framework.status import (
     HTTP_204_NO_CONTENT,
 )
 from rest_framework.test import APITestCase
-from commerce.models import Cart, Order, Order2Product, Product
+from commerce.models import Cart, Category, Order, Order2Product, Product
 
 
 class OrderTests(APITestCase):
     def setUp(self):
         user1 = User.objects.create(username="user1")
         user2 = User.objects.create(username="user2")
-        product1 = Product.objects.create(title="product1", price=1)
-        product2 = Product.objects.create(title="product2", price=2)
+        user3 = User.objects.create(username="user3")
+        category = Category.objects.create(title="category")
+        product1 = Product.objects.create(
+            vendor=user1, category=category, title="product1", price=1
+        )
+        product2 = Product.objects.create(
+            vendor=user1, category=category, title="product2", price=2
+        )
 
-        order = Order.objects.create(customer=user1)
+        order = Order.objects.create(customer=user2)
         Order2Product.objects.create(order=order, product=product1, quantity=1)
         Order2Product.objects.create(order=order, product=product2, quantity=2)
 
-        Cart.objects.create(customer=user2, product=product1, quantity=2)
-        Cart.objects.create(customer=user2, product=product2, quantity=3)
+        Cart.objects.create(customer=user3, product=product1, quantity=2)
+        Cart.objects.create(customer=user3, product=product2, quantity=3)
 
     def test_list_order(self):
         response = self.client.get(
@@ -33,7 +39,7 @@ class OrderTests(APITestCase):
     def test_create_order(self):
         response = self.client.post(
             "/commerce/orders/",
-            data={"customer": "/commerce/users/2/"},
+            data={"customer": "/commerce/users/3/"},
             format="json",
         )
 
@@ -49,19 +55,19 @@ class OrderTests(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(
-            response.data["customer"], "http://testserver/commerce/users/1/"
+            response.data["customer"], "http://testserver/commerce/users/2/"
         )
 
     def test_update_order(self):
         response = self.client.put(
             "/commerce/orders/1/",
-            data={"customer": "/commerce/users/2/"},
+            data={"customer": "/commerce/users/3/"},
             format="json",
         )
 
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(
-            response.data["customer"], "http://testserver/commerce/users/2/"
+            response.data["customer"], "http://testserver/commerce/users/3/"
         )
 
     def test_destroy_order(self):

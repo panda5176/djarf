@@ -5,14 +5,19 @@ from rest_framework.status import (
     HTTP_204_NO_CONTENT,
 )
 from rest_framework.test import APITestCase
-from commerce.models import Cart, Product
+from commerce.models import Cart, Category, Product
 
 
 class CartTests(APITestCase):
     def setUp(self):
         user = User.objects.create()
-        product1 = Product.objects.create(title="product1", price=1)
-        _ = Product.objects.create(title="product2", price=2)
+        category = Category.objects.create(title="category")
+        product1 = Product.objects.create(
+            vendor=user, category=category, title="product1", price=1
+        )
+        _ = Product.objects.create(
+            vendor=user, category=category, title="product2", price=2
+        )
 
         Cart.objects.create(customer=user, product=product1)
 

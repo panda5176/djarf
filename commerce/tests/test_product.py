@@ -10,8 +10,11 @@ from commerce.models import Category, Product, Tag
 
 class ProductTests(APITestCase):
     def setUp(self):
-        _ = Product.objects.create(title="product1", price=1)
-        _ = Category.objects.create(title="category")
+        user = User.objects.create()
+        category = Category.objects.create(title="category")
+        _ = Product.objects.create(
+            vendor=user, category=category, title="product1", price=1
+        )
         _ = Tag.objects.create(title="tag")
 
     def test_list_product(self):
@@ -26,9 +29,10 @@ class ProductTests(APITestCase):
         response = self.client.post(
             "/commerce/products/",
             data={
-                "title": "product2",
+                "vendor": "/commerce/users/1/",
                 "category": "/commerce/categories/1/",
                 "tag": ["/commerce/tags/1/"],
+                "title": "product2",
                 "price": 2,
             },
             format="json",
@@ -49,9 +53,10 @@ class ProductTests(APITestCase):
         response = self.client.put(
             "/commerce/products/1/",
             data={
-                "title": "product1",
+                "vendor": "/commerce/users/1/",
                 "category": "/commerce/categories/1/",
                 "tag": ["/commerce/tags/1/"],
+                "title": "product1",
                 "price": 1,
             },
             format="json",
