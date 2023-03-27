@@ -3,7 +3,7 @@ from django.db import models
 
 class Cart(models.Model):
     customer = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, related_name="carts"
+        "auth.User", on_delete=models.CASCADE, related_name="carts", unique=True
     )
     product = models.ForeignKey(
         "Product", on_delete=models.CASCADE, related_name="carts"
@@ -32,6 +32,30 @@ class Category(models.Model):
         ordering = ["title"]
 
 
+class Comment(models.Model):
+    commentor = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, related_name="comments"
+    )
+    product = models.ForeignKey(
+        "Product", on_delete=models.CASCADE, related_name="comments"
+    )
+    rating = models.PositiveSmallIntegerField(
+        db_index=True,
+        choices=tuple(f for f in range(0.5, 5.01, 0.5)),
+    )
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    likes = models.PositiveSmallIntegerField(db_index=True, default=0)
+    dislikes = models.PositiveSmallIntegerField(db_index=True, default=0)
+    description = models.TextField(default="", blank=True)
+
+    def __str__(self):
+        return self.rating
+
+    class Meta:
+        get_latest_by = "created"
+        ordering = ["-created"]
+
+
 class Order(models.Model):
     customer = models.ForeignKey(
         "auth.User", on_delete=models.CASCADE, related_name="orders"
@@ -40,7 +64,7 @@ class Order(models.Model):
 
     class Meta:
         get_latest_by = "created"
-        ordering = ["created"]
+        ordering = ["-created"]
 
 
 class Order2Product(models.Model):
