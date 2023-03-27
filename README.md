@@ -6,15 +6,16 @@ Django applications with REST framework
 ## Quickstart
 
 ```sh
-$ git clone https://github.com/panda5176/djarf
-$ cd djarf
-$ python3 -m venv venv
-$ source venv/bin/activate
-$ python3 -m pip install -r requirements.txt
-$ python3 manage.py migrate
-$ python3 manage.py createsuperuser  # admin:password123
-$ python3 manage.py runserver
-$ http -a admin:password123 POST http://127.0.0.1:8000/snippets/ code="print(123)"
+git clone https://github.com/panda5176/djarf
+cd djarf
+python -m venv venv
+source venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser  # admin:password123
+python manage.py runserver
+http -a admin:password123 POST http://127.0.0.1:8000/snippets/ code="print(123)"
 ```
 
 
