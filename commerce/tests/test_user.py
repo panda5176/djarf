@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 
 class UserTests(APITestCase):
     def setUp(self):
-        User.objects.create()
+        _ = User.objects.create()
 
     def test_list_user(self):
         response = self.client.get("/commerce/users/", data=None, format="json")

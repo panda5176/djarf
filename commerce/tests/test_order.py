@@ -22,11 +22,15 @@ class OrderTests(APITestCase):
         )
 
         order = Order.objects.create(customer=user2)
-        Order2Product.objects.create(order=order, product=product1, quantity=1)
-        Order2Product.objects.create(order=order, product=product2, quantity=2)
+        _ = Order2Product.objects.create(
+            order=order, product=product1, quantity=1
+        )
+        _ = Order2Product.objects.create(
+            order=order, product=product2, quantity=2
+        )
 
-        Cart.objects.create(customer=user3, product=product1, quantity=2)
-        Cart.objects.create(customer=user3, product=product2, quantity=3)
+        _ = Cart.objects.create(customer=user3, product=product1, quantity=2)
+        _ = Cart.objects.create(customer=user3, product=product2, quantity=3)
 
     def test_list_order(self):
         response = self.client.get(

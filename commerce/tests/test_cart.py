@@ -19,7 +19,7 @@ class CartTests(APITestCase):
             vendor=user, category=category, title="product2", price=2
         )
 
-        Cart.objects.create(customer=user, product=product1)
+        _ = Cart.objects.create(customer=user, product=product1)
 
     def test_list_cart(self):
         response = self.client.get("/commerce/carts/", data=None, format="json")

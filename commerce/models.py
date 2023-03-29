@@ -11,13 +11,19 @@ class Cart(models.Model):
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     quantity = models.PositiveSmallIntegerField(default=1)
 
+    def __str__(self):
+        return ", ".join(
+            [str(self.customer), str(self.product), str(self.created)]
+        )
+
     class Meta:
         get_latest_by = "created"
         ordering = ["created"]
         indexes = [models.Index(fields=["customer", "product"])]
         constraints = [
             models.UniqueConstraint(
-                fields=["customer", "product"], name="unique_customer_product"
+                fields=["customer", "product"],
+                name="cart_unique_customer_product",
             )
         ]
 
@@ -38,6 +44,9 @@ class Order(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True, db_index=True)
 
+    def __str__(self):
+        return ", ".join([str(self.customer), str(self.created)])
+
     class Meta:
         get_latest_by = "created"
         ordering = ["-created"]
@@ -52,12 +61,16 @@ class Order2Product(models.Model):
     )
     quantity = models.PositiveSmallIntegerField(default=1)
 
+    def __str__(self):
+        return ", ".join([str(self.order), str(self.product)])
+
     class Meta:
         ordering = ["order"]
         indexes = [models.Index(fields=["order", "product"])]
         constraints = [
             models.UniqueConstraint(
-                fields=["order", "product"], name="unique_order_product"
+                fields=["order", "product"],
+                name="order2product_unique_order_product",
             )
         ]
 
@@ -72,9 +85,8 @@ class Product(models.Model):
     tag = models.ManyToManyField("Tag", related_name="products", blank=True)
     title = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
+    modified = models.DateTimeField(auto_now=True, db_index=True)
     price = models.PositiveIntegerField(db_index=True)
-    likes = models.PositiveSmallIntegerField(db_index=True, default=0)
-    dislikes = models.PositiveSmallIntegerField(db_index=True, default=0)
     description = models.TextField(default="", blank=True)
 
     def __str__(self):
@@ -83,6 +95,27 @@ class Product(models.Model):
     class Meta:
         get_latest_by = "created"
         ordering = ["-created"]
+
+
+class ProductLike(models.Model):
+    liker = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, related_name="product_likes"
+    )
+    product = models.ForeignKey(
+        "Product", on_delete=models.CASCADE, related_name="product_likes"
+    )
+
+    def __str__(self):
+        return ", ".join([str(self.liker), str(self.product)])
+
+    class Meta:
+        ordering = ["liker"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["liker", "product"],
+                name="product_like_unique_liker_product",
+            )
+        ]
 
 
 class Review(models.Model):
@@ -98,19 +131,41 @@ class Review(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     modified = models.DateTimeField(auto_now=True, db_index=True)
-    likes = models.PositiveSmallIntegerField(db_index=True, default=0)
-    dislikes = models.PositiveSmallIntegerField(db_index=True, default=0)
     description = models.TextField(default="", blank=True)
 
     def __str__(self):
-        return self.rating
+        return ", ".join(
+            [str(self.reviewer), str(self.product), str(self.rating)]
+        )
 
     class Meta:
         get_latest_by = "created"
         ordering = ["-created"]
         constraints = [
             models.UniqueConstraint(
-                fields=["reviewer", "product"], name="unique_reviewer_product"
+                fields=["reviewer", "product"],
+                name="review_unique_reviewer_product",
+            )
+        ]
+
+
+class ReviewLike(models.Model):
+    liker = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, related_name="review_likes"
+    )
+    review = models.ForeignKey(
+        "Review", on_delete=models.CASCADE, related_name="review_likes"
+    )
+
+    def __str__(self):
+        return ", ".join([str(self.liker), str(self.review)])
+
+    class Meta:
+        ordering = ["liker"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["liker", "review"],
+                name="review_like_unique_liker_review",
             )
         ]
 

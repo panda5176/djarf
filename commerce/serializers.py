@@ -7,7 +7,9 @@ from commerce.models import (
     Order,
     Order2Product,
     Product,
+    ProductLike,
     Review,
+    ReviewLike,
     Tag,
 )
 
@@ -17,8 +19,24 @@ LOGGER = logging.getLogger(__name__)
 class UserSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ["url", "id", "carts", "orders", "products", "reviews"]
-        read_only_fields = ["carts", "orders", "products", "reviews"]
+        fields = [
+            "url",
+            "id",
+            "carts",
+            "orders",
+            "products",
+            "product_likes",
+            "reviews",
+            "review_likes",
+        ]
+        read_only_fields = [
+            "carts",
+            "orders",
+            "products",
+            "product_likes",
+            "reviews",
+            "review_likes",
+        ]
 
 
 class CartSerializer(HyperlinkedModelSerializer):
@@ -73,14 +91,20 @@ class ProductSerializer(HyperlinkedModelSerializer):
             "tag",
             "title",
             "created",
+            "modified",
             "price",
-            "likes",
-            "dislikes",
             "description",
             "order2products",
+            "product_likes",
             "reviews",
         ]
-        read_only_fields = ["order2products", "reviews"]
+        read_only_fields = ["order2products", "product_likes", "reviews"]
+
+
+class ProductLikeSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = ProductLike
+        fields = ["url", "id", "liker", "product"]
 
 
 class ReviewSerializer(HyperlinkedModelSerializer):
@@ -94,10 +118,16 @@ class ReviewSerializer(HyperlinkedModelSerializer):
             "rating",
             "created",
             "modified",
-            "likes",
-            "dislikes",
             "description",
+            "review_likes",
         ]
+        read_only_fields = ["review_likes"]
+
+
+class ReviewLikeSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = ReviewLike
+        fields = ["url", "id", "liker", "review"]
 
 
 class TagSerializer(HyperlinkedModelSerializer):

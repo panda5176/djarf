@@ -12,9 +12,11 @@ class Order2ProductTests(APITestCase):
         product = Product.objects.create(
             vendor=user, category=category, title="product1", price=1
         )
-        Order2Product.objects.create(order=order, product=product, quantity=1)
+        _ = Order2Product.objects.create(
+            order=order, product=product, quantity=1
+        )
 
-    def test_list_order2project(self):
+    def test_list_order2product(self):
         response = self.client.get(
             "/commerce/order2products/", data=None, format="json"
         )
@@ -22,7 +24,7 @@ class Order2ProductTests(APITestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
 
-    def test_retrieve_order2project(self):
+    def test_retrieve_order2product(self):
         response = self.client.get(
             "/commerce/order2products/1/", data=None, format="json"
         )

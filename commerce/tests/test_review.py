@@ -39,7 +39,6 @@ class ProductTests(APITestCase):
             format="json",
         )
 
-        print(response.data)
         self.assertEqual(response.status_code, HTTP_201_CREATED)
         self.assertEqual(Review.objects.all().count(), 2)
 
