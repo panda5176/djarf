@@ -1,6 +1,6 @@
 import logging
 from django.contrib.auth.models import User
-from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework.serializers import HyperlinkedModelSerializer, IntegerField
 from commerce.models import (
     Cart,
     Category,
@@ -17,6 +17,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 class UserSerializer(HyperlinkedModelSerializer):
+    products_count = IntegerField(source="products.count", read_only=True)
+    reviews_count = IntegerField(source="reviews.count", read_only=True)
+
     class Meta:
         model = User
         fields = [
@@ -24,16 +27,20 @@ class UserSerializer(HyperlinkedModelSerializer):
             "id",
             "carts",
             "orders",
+            "products_count",
             "products",
             "product_likes",
+            "reviews_count",
             "reviews",
             "review_likes",
         ]
         read_only_fields = [
             "carts",
             "orders",
+            "products_count",
             "products",
             "product_likes",
+            "reviews_count",
             "reviews",
             "review_likes",
         ]
@@ -46,10 +53,12 @@ class CartSerializer(HyperlinkedModelSerializer):
 
 
 class CategorySerializer(HyperlinkedModelSerializer):
+    products_count = IntegerField(source="products.count", read_only=True)
+
     class Meta:
         model = Category
-        fields = ["url", "id", "title", "products"]
-        read_only_fields = ["products"]
+        fields = ["url", "id", "title", "products_count", "products"]
+        read_only_fields = ["products_count", "products"]
 
 
 class OrderSerializer(HyperlinkedModelSerializer):
@@ -81,6 +90,10 @@ class Order2ProductSerializer(HyperlinkedModelSerializer):
 
 
 class ProductSerializer(HyperlinkedModelSerializer):
+    product_likes_count = IntegerField(
+        source="product_likes.count", read_only=True
+    )
+
     class Meta:
         model = Product
         fields = [
@@ -95,10 +108,16 @@ class ProductSerializer(HyperlinkedModelSerializer):
             "price",
             "description",
             "order2products",
+            "product_likes_count",
             "product_likes",
             "reviews",
         ]
-        read_only_fields = ["order2products", "product_likes", "reviews"]
+        read_only_fields = [
+            "order2products",
+            "product_likes_count",
+            "product_likes",
+            "reviews",
+        ]
 
 
 class ProductLikeSerializer(HyperlinkedModelSerializer):
@@ -108,6 +127,10 @@ class ProductLikeSerializer(HyperlinkedModelSerializer):
 
 
 class ReviewSerializer(HyperlinkedModelSerializer):
+    review_likes_count = IntegerField(
+        source="review_likes.count", read_only=True
+    )
+
     class Meta:
         model = Review
         fields = [
@@ -119,9 +142,10 @@ class ReviewSerializer(HyperlinkedModelSerializer):
             "created",
             "modified",
             "description",
+            "review_likes_count",
             "review_likes",
         ]
-        read_only_fields = ["review_likes"]
+        read_only_fields = ["review_likes_count", "review_likes"]
 
 
 class ReviewLikeSerializer(HyperlinkedModelSerializer):
@@ -131,7 +155,9 @@ class ReviewLikeSerializer(HyperlinkedModelSerializer):
 
 
 class TagSerializer(HyperlinkedModelSerializer):
+    products_count = IntegerField(source="products.count", read_only=True)
+
     class Meta:
         model = Tag
-        fields = ["url", "id", "title", "products"]
-        read_only_fields = ["products"]
+        fields = ["url", "id", "title", "products_count", "products"]
+        read_only_fields = ["products_count", "products"]
