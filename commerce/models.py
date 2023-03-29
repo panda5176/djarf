@@ -3,7 +3,7 @@ from django.db import models
 
 class Cart(models.Model):
     customer = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, related_name="carts", unique=True
+        "auth.User", on_delete=models.CASCADE, related_name="carts"
     )
     product = models.ForeignKey(
         "Product", on_delete=models.CASCADE, related_name="carts"
@@ -23,37 +23,13 @@ class Cart(models.Model):
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.title
 
     class Meta:
         ordering = ["title"]
-
-
-class Comment(models.Model):
-    commentor = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, related_name="comments"
-    )
-    product = models.ForeignKey(
-        "Product", on_delete=models.CASCADE, related_name="comments"
-    )
-    rating = models.PositiveSmallIntegerField(
-        db_index=True,
-        choices=tuple(f for f in range(0.5, 5.01, 0.5)),
-    )
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
-    likes = models.PositiveSmallIntegerField(db_index=True, default=0)
-    dislikes = models.PositiveSmallIntegerField(db_index=True, default=0)
-    description = models.TextField(default="", blank=True)
-
-    def __str__(self):
-        return self.rating
-
-    class Meta:
-        get_latest_by = "created"
-        ordering = ["-created"]
 
 
 class Order(models.Model):
@@ -109,8 +85,40 @@ class Product(models.Model):
         ordering = ["-created"]
 
 
+class Review(models.Model):
+    reviewer = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, related_name="reviews"
+    )
+    product = models.ForeignKey(
+        "Product", on_delete=models.CASCADE, related_name="reviews"
+    )
+    rating = models.DecimalField(
+        max_digits=2,
+        decimal_places=1,
+        db_index=True,
+        choices=[(score / 2, score / 2) for score in range(1, 11)],
+    )
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    modified = models.DateTimeField(auto_now=True, db_index=True)
+    likes = models.PositiveSmallIntegerField(db_index=True, default=0)
+    dislikes = models.PositiveSmallIntegerField(db_index=True, default=0)
+    description = models.TextField(default="", blank=True)
+
+    def __str__(self):
+        return self.rating
+
+    class Meta:
+        get_latest_by = "created"
+        ordering = ["-created"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["reviewer", "product"], name="unique_reviewer_product"
+            )
+        ]
+
+
 class Tag(models.Model):
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.title

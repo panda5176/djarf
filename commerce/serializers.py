@@ -1,7 +1,15 @@
 import logging
 from django.contrib.auth.models import User
 from rest_framework.serializers import HyperlinkedModelSerializer
-from commerce.models import Cart, Category, Order, Order2Product, Product, Tag
+from commerce.models import (
+    Cart,
+    Category,
+    Order,
+    Order2Product,
+    Product,
+    Review,
+    Tag,
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -9,7 +17,8 @@ LOGGER = logging.getLogger(__name__)
 class UserSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ["url", "id", "carts", "orders"]
+        fields = ["url", "id", "carts", "orders", "products", "reviews"]
+        read_only_fields = ["carts", "orders", "products", "reviews"]
 
 
 class CartSerializer(HyperlinkedModelSerializer):
@@ -65,6 +74,26 @@ class ProductSerializer(HyperlinkedModelSerializer):
             "title",
             "created",
             "price",
+            "likes",
+            "dislikes",
+            "description",
+            "order2products",
+            "reviews",
+        ]
+        read_only_fields = ["order2products", "reviews"]
+
+
+class ReviewSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = Review
+        fields = [
+            "url",
+            "id",
+            "reviewer",
+            "product",
+            "rating",
+            "created",
+            "modified",
             "likes",
             "dislikes",
             "description",

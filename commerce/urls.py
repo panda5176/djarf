@@ -7,6 +7,7 @@ from commerce.views import (
     OrderViewSet,
     Order2ProductViewSet,
     ProductViewSet,
+    ReviewViewSet,
     TagViewSet,
 )
 
@@ -19,6 +20,7 @@ router.register(
     "order2products", Order2ProductViewSet, basename="order2product"
 )
 router.register("products", ProductViewSet, basename="product")
+router.register("reviews", ReviewViewSet, basename="review")
 router.register("tags", TagViewSet, basename="tag")
 
 

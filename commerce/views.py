@@ -1,7 +1,15 @@
 import logging
 from django.contrib.auth.models import User
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from commerce.models import Cart, Category, Order, Order2Product, Product, Tag
+from commerce.models import (
+    Cart,
+    Category,
+    Order,
+    Order2Product,
+    Product,
+    Review,
+    Tag,
+)
 from commerce.serializers import (
     UserSerializer,
     CartSerializer,
@@ -9,6 +17,7 @@ from commerce.serializers import (
     OrderSerializer,
     Order2ProductSerializer,
     ProductSerializer,
+    ReviewSerializer,
     TagSerializer,
 )
 
@@ -49,6 +58,11 @@ class Order2ProductViewSet(ReadOnlyModelViewSet):
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class ReviewViewSet(ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
 
 
 class TagViewSet(ModelViewSet):
