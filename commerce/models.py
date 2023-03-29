@@ -92,9 +92,7 @@ class Review(models.Model):
     product = models.ForeignKey(
         "Product", on_delete=models.CASCADE, related_name="reviews"
     )
-    rating = models.DecimalField(
-        max_digits=2,
-        decimal_places=1,
+    rating = models.FloatField(
         db_index=True,
         choices=[(score / 2, score / 2) for score in range(1, 11)],
     )
