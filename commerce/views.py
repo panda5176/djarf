@@ -17,9 +17,7 @@ from commerce.models import (
     Order,
     Order2Product,
     Product,
-    ProductLike,
     Review,
-    ReviewLike,
     Tag,
 )
 from commerce.serializers import (
@@ -29,9 +27,7 @@ from commerce.serializers import (
     OrderSerializer,
     Order2ProductSerializer,
     ProductSerializer,
-    ProductLikeSerializer,
     ReviewSerializer,
-    ReviewLikeSerializer,
     TagSerializer,
 )
 
@@ -74,31 +70,9 @@ class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
 
 
-class ProductLikeViewSet(
-    ListModelMixin,
-    CreateModelMixin,
-    RetrieveModelMixin,
-    DestroyModelMixin,
-    GenericViewSet,
-):
-    queryset = ProductLike.objects.all()
-    serializer_class = ProductLikeSerializer
-
-
 class ReviewViewSet(ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-
-
-class ReviewLikeViewSet(
-    ListModelMixin,
-    CreateModelMixin,
-    RetrieveModelMixin,
-    DestroyModelMixin,
-    GenericViewSet,
-):
-    queryset = ReviewLike.objects.all()
-    serializer_class = ReviewLikeSerializer
 
 
 class TagViewSet(ModelViewSet):

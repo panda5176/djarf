@@ -82,7 +82,13 @@ class Product(models.Model):
     category = models.ForeignKey(
         "Category", on_delete=models.CASCADE, related_name="products"
     )
-    tag = models.ManyToManyField("Tag", related_name="products", blank=True)
+    tags = models.ManyToManyField("Tag", related_name="products", blank=True)
+    likes = models.ManyToManyField(
+        "auth.User", related_name="product_likes", blank=True
+    )
+    dislikes = models.ManyToManyField(
+        "auth.User", related_name="product_dislikes", blank=True
+    )
     title = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     modified = models.DateTimeField(auto_now=True, db_index=True)
@@ -97,33 +103,18 @@ class Product(models.Model):
         ordering = ["-created"]
 
 
-class ProductLike(models.Model):
-    liker = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, related_name="product_likes"
-    )
-    product = models.ForeignKey(
-        "Product", on_delete=models.CASCADE, related_name="product_likes"
-    )
-
-    def __str__(self):
-        return ", ".join([str(self.liker), str(self.product)])
-
-    class Meta:
-        ordering = ["liker"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=["liker", "product"],
-                name="product_like_unique_liker_product",
-            )
-        ]
-
-
 class Review(models.Model):
     reviewer = models.ForeignKey(
         "auth.User", on_delete=models.CASCADE, related_name="reviews"
     )
     product = models.ForeignKey(
         "Product", on_delete=models.CASCADE, related_name="reviews"
+    )
+    likes = models.ManyToManyField(
+        "auth.User", related_name="review_likes", blank=True
+    )
+    dislikes = models.ManyToManyField(
+        "auth.User", related_name="review_dislikes", blank=True
     )
     rating = models.FloatField(
         db_index=True,
@@ -145,27 +136,6 @@ class Review(models.Model):
             models.UniqueConstraint(
                 fields=["reviewer", "product"],
                 name="review_unique_reviewer_product",
-            )
-        ]
-
-
-class ReviewLike(models.Model):
-    liker = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, related_name="review_likes"
-    )
-    review = models.ForeignKey(
-        "Review", on_delete=models.CASCADE, related_name="review_likes"
-    )
-
-    def __str__(self):
-        return ", ".join([str(self.liker), str(self.review)])
-
-    class Meta:
-        ordering = ["liker"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=["liker", "review"],
-                name="review_like_unique_liker_review",
             )
         ]
 

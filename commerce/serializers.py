@@ -7,9 +7,7 @@ from commerce.models import (
     Order,
     Order2Product,
     Product,
-    ProductLike,
     Review,
-    ReviewLike,
     Tag,
 )
 
@@ -90,9 +88,8 @@ class Order2ProductSerializer(HyperlinkedModelSerializer):
 
 
 class ProductSerializer(HyperlinkedModelSerializer):
-    product_likes_count = IntegerField(
-        source="product_likes.count", read_only=True
-    )
+    likes_count = IntegerField(source="likes.count", read_only=True)
+    dislikes_count = IntegerField(source="dislikes.count", read_only=True)
 
     class Meta:
         model = Product
@@ -101,35 +98,30 @@ class ProductSerializer(HyperlinkedModelSerializer):
             "id",
             "vendor",
             "category",
-            "tag",
+            "tags",
+            "likes",
+            "likes_count",
+            "dislikes",
+            "dislikes_count",
             "title",
             "created",
             "modified",
             "price",
             "description",
             "order2products",
-            "product_likes_count",
-            "product_likes",
             "reviews",
         ]
         read_only_fields = [
+            "likes_count",
+            "dislikes_count",
             "order2products",
-            "product_likes_count",
-            "product_likes",
             "reviews",
         ]
 
 
-class ProductLikeSerializer(HyperlinkedModelSerializer):
-    class Meta:
-        model = ProductLike
-        fields = ["url", "id", "liker", "product"]
-
-
 class ReviewSerializer(HyperlinkedModelSerializer):
-    review_likes_count = IntegerField(
-        source="review_likes.count", read_only=True
-    )
+    likes_count = IntegerField(source="likes.count", read_only=True)
+    dislikes_count = IntegerField(source="dislikes.count", read_only=True)
 
     class Meta:
         model = Review
@@ -138,20 +130,16 @@ class ReviewSerializer(HyperlinkedModelSerializer):
             "id",
             "reviewer",
             "product",
+            "likes",
+            "likes_count",
+            "dislikes",
+            "dislikes_count",
             "rating",
             "created",
             "modified",
             "description",
-            "review_likes_count",
-            "review_likes",
         ]
-        read_only_fields = ["review_likes_count", "review_likes"]
-
-
-class ReviewLikeSerializer(HyperlinkedModelSerializer):
-    class Meta:
-        model = ReviewLike
-        fields = ["url", "id", "liker", "review"]
+        read_only_fields = ["likes_count", "dislikes_count"]
 
 
 class TagSerializer(HyperlinkedModelSerializer):
