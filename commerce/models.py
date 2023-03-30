@@ -1,17 +1,10 @@
 from django.db import models
-
-
-class AbstractModel(models.Model):
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
-    updated = models.DateTimeField(auto_now=True, db_index=True)
-
-    class Meta:
-        abstract = True
+from common.models import AbstractModel
 
 
 class Cart(AbstractModel):
     customer = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, related_name="carts"
+        "common.User", on_delete=models.CASCADE, related_name="carts"
     )
     product = models.ForeignKey(
         "Product", on_delete=models.CASCADE, related_name="carts"
@@ -47,7 +40,7 @@ class Category(AbstractModel):
 
 class Order(AbstractModel):
     customer = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, related_name="orders"
+        "common.User", on_delete=models.CASCADE, related_name="orders"
     )
 
     def __str__(self):
@@ -83,17 +76,17 @@ class Order2Product(AbstractModel):
 
 class Product(AbstractModel):
     vendor = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, related_name="products"
+        "common.User", on_delete=models.CASCADE, related_name="products"
     )
     category = models.ForeignKey(
         "Category", on_delete=models.CASCADE, related_name="products"
     )
     tags = models.ManyToManyField("Tag", related_name="products", blank=True)
     likes = models.ManyToManyField(
-        "auth.User", related_name="product_likes", blank=True
+        "common.User", related_name="product_likes", blank=True
     )
     dislikes = models.ManyToManyField(
-        "auth.User", related_name="product_dislikes", blank=True
+        "common.User", related_name="product_dislikes", blank=True
     )
     title = models.CharField(max_length=100)
     price = models.PositiveIntegerField(db_index=True)
@@ -109,16 +102,16 @@ class Product(AbstractModel):
 
 class Review(AbstractModel):
     reviewer = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, related_name="reviews"
+        "common.User", on_delete=models.CASCADE, related_name="reviews"
     )
     product = models.ForeignKey(
         "Product", on_delete=models.CASCADE, related_name="reviews"
     )
     likes = models.ManyToManyField(
-        "auth.User", related_name="review_likes", blank=True
+        "common.User", related_name="review_likes", blank=True
     )
     dislikes = models.ManyToManyField(
-        "auth.User", related_name="review_dislikes", blank=True
+        "common.User", related_name="review_dislikes", blank=True
     )
     rating = models.FloatField(
         db_index=True,

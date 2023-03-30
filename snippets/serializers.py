@@ -1,5 +1,5 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
+from common.models import User
 from snippets.models import Snippet
 
 

@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
@@ -6,6 +5,7 @@ from rest_framework.status import (
 )
 from rest_framework.test import APITestCase
 from commerce.models import Category, Product, Tag
+from common.models import User
 
 
 class ProductTests(APITestCase):
@@ -29,7 +29,7 @@ class ProductTests(APITestCase):
         response = self.client.post(
             "/commerce/products/",
             data={
-                "vendor": "/commerce/users/1/",
+                "vendor": "/common/users/1/",
                 "category": "/commerce/categories/1/",
                 "tag": ["/commerce/tags/1/"],
                 "title": "product2",
@@ -53,7 +53,7 @@ class ProductTests(APITestCase):
         response = self.client.put(
             "/commerce/products/1/",
             data={
-                "vendor": "/commerce/users/1/",
+                "vendor": "/common/users/1/",
                 "category": "/commerce/categories/1/",
                 "tag": ["/commerce/tags/1/"],
                 "title": "product1",

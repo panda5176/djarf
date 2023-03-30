@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
@@ -6,6 +5,7 @@ from rest_framework.status import (
 )
 from rest_framework.test import APITestCase
 from commerce.models import Cart, Category, Order, Order2Product, Product
+from common.models import User
 
 
 class OrderTests(APITestCase):
@@ -43,7 +43,7 @@ class OrderTests(APITestCase):
     def test_create_order(self):
         response = self.client.post(
             "/commerce/orders/",
-            data={"customer": "/commerce/users/3/"},
+            data={"customer": "/common/users/3/"},
             format="json",
         )
 
@@ -59,19 +59,19 @@ class OrderTests(APITestCase):
 
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(
-            response.data["customer"], "http://testserver/commerce/users/2/"
+            response.data["customer"], "http://testserver/common/users/2/"
         )
 
     def test_update_order(self):
         response = self.client.put(
             "/commerce/orders/1/",
-            data={"customer": "/commerce/users/3/"},
+            data={"customer": "/common/users/3/"},
             format="json",
         )
 
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(
-            response.data["customer"], "http://testserver/commerce/users/3/"
+            response.data["customer"], "http://testserver/common/users/3/"
         )
 
     def test_destroy_order(self):

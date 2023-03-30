@@ -4,9 +4,8 @@ from snippets import views
 
 router = DefaultRouter()
 router.register(r"snippets", views.SnippetViewSet, basename="snippet")
-router.register(r"users", views.UserViewSet, basename="user")
+router.register(r"users", views.UserViewSet, basename="snippets.user")
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("api-auth/", include("rest_framework.urls")),
 ]

@@ -1,73 +1,71 @@
-from django.contrib.auth.models import User
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
     HTTP_204_NO_CONTENT,
 )
 from rest_framework.test import APITestCase
-from commerce.models import Category, Product, Review
+from commerce.models import Cart, Category, Product
+from common.models import User
 
 
-class ProductTests(APITestCase):
+class CartTests(APITestCase):
     def setUp(self):
         user = User.objects.create()
         category = Category.objects.create(title="category")
-        product = Product.objects.create(
+        product1 = Product.objects.create(
             vendor=user, category=category, title="product1", price=1
         )
         _ = Product.objects.create(
             vendor=user, category=category, title="product2", price=2
         )
-        _ = Review.objects.create(reviewer=user, product=product, rating=5.0)
 
-    def test_list_review(self):
-        response = self.client.get(
-            "/commerce/reviews/", data=None, format="json"
-        )
+        _ = Cart.objects.create(customer=user, product=product1)
+
+    def test_list_cart(self):
+        response = self.client.get("/commerce/carts/", data=None, format="json")
 
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
 
-    def test_create_review(self):
+    def test_create_cart(self):
         response = self.client.post(
-            "/commerce/reviews/",
+            "/commerce/carts/",
             data={
-                "reviewer": "/commerce/users/1/",
+                "customer": "/common/users/1/",
                 "product": "/commerce/products/2/",
-                "rating": 0.5,
             },
             format="json",
         )
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
-        self.assertEqual(Review.objects.all().count(), 2)
+        self.assertEqual(Cart.objects.all().count(), 2)
 
-    def test_retrieve_review(self):
+    def test_retrieve_cart(self):
         response = self.client.get(
-            "/commerce/reviews/1/", data=None, format="json"
+            "/commerce/carts/1/", data=None, format="json"
         )
 
         self.assertEqual(response.status_code, HTTP_200_OK)
-        self.assertEqual(response.data["rating"], 5.0)
+        self.assertEqual(response.data["quantity"], 1)
 
-    def test_update_review(self):
+    def test_update_cart(self):
         response = self.client.put(
-            "/commerce/reviews/1/",
+            "/commerce/carts/1/",
             data={
-                "reviewer": "/commerce/users/1/",
+                "customer": "/common/users/1/",
                 "product": "/commerce/products/1/",
-                "rating": 0.5,
+                "quantity": 2,
             },
             format="json",
         )
 
         self.assertEqual(response.status_code, HTTP_200_OK)
-        self.assertEqual(response.data["rating"], 0.5)
+        self.assertEqual(response.data["quantity"], 2)
 
-    def test_destroy_review(self):
+    def test_destroy_cart(self):
         response = self.client.delete(
-            "/commerce/reviews/1/", data=None, format="json"
+            "/commerce/carts/1/", data=None, format="json"
         )
 
         self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
-        self.assertEqual(Review.objects.all().count(), 0)
+        self.assertEqual(Cart.objects.all().count(), 0)

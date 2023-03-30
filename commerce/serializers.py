@@ -1,5 +1,4 @@
 import logging
-from django.contrib.auth.models import User
 from rest_framework.serializers import HyperlinkedModelSerializer, IntegerField
 from commerce.models import (
     Cart,
@@ -10,6 +9,7 @@ from commerce.models import (
     Review,
     Tag,
 )
+from common.models import User
 
 LOGGER = logging.getLogger(__name__)
 
@@ -24,6 +24,8 @@ class UserSerializer(HyperlinkedModelSerializer):
         fields = [
             "url",
             "id",
+            "created",
+            "updated",
             "carts",
             "orders_count",
             "orders",
@@ -35,6 +37,8 @@ class UserSerializer(HyperlinkedModelSerializer):
             "review_likes",
         ]
         read_only_fields = [
+            "created",
+            "updated",
             "carts",
             "orders_count",
             "orders",

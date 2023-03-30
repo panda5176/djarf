@@ -12,7 +12,7 @@ from commerce.views import (
 )
 
 router = DefaultRouter()
-router.register("users", UserViewSet, basename="user")
+router.register("users", UserViewSet, basename="commerce.user")
 router.register("carts", CartViewSet, basename="cart")
 router.register("categories", CategoryViewSet, basename="category")
 router.register("orders", OrderViewSet, basename="order")

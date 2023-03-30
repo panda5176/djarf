@@ -1,7 +1,7 @@
-from django.contrib.auth.models import User
 from rest_framework.status import HTTP_200_OK
 from rest_framework.test import APITestCase
 from commerce.models import Category, Order, Order2Product, Product
+from common.models import User
 
 
 class Order2ProductTests(APITestCase):
