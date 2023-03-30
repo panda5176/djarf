@@ -1,14 +1,21 @@
 from django.db import models
 
 
-class Cart(models.Model):
+class AbstractModel(models.Model):
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated = models.DateTimeField(auto_now=True, db_index=True)
+
+    class Meta:
+        abstract = True
+
+
+class Cart(AbstractModel):
     customer = models.ForeignKey(
         "auth.User", on_delete=models.CASCADE, related_name="carts"
     )
     product = models.ForeignKey(
         "Product", on_delete=models.CASCADE, related_name="carts"
     )
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
     quantity = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
@@ -28,7 +35,7 @@ class Cart(models.Model):
         ]
 
 
-class Category(models.Model):
+class Category(AbstractModel):
     title = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
@@ -38,11 +45,10 @@ class Category(models.Model):
         ordering = ["title"]
 
 
-class Order(models.Model):
+class Order(AbstractModel):
     customer = models.ForeignKey(
         "auth.User", on_delete=models.CASCADE, related_name="orders"
     )
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
 
     def __str__(self):
         return ", ".join([str(self.customer), str(self.created)])
@@ -52,7 +58,7 @@ class Order(models.Model):
         ordering = ["-created"]
 
 
-class Order2Product(models.Model):
+class Order2Product(AbstractModel):
     order = models.ForeignKey(
         "Order", on_delete=models.CASCADE, related_name="order2products"
     )
@@ -65,7 +71,7 @@ class Order2Product(models.Model):
         return ", ".join([str(self.order), str(self.product)])
 
     class Meta:
-        ordering = ["order"]
+        ordering = ["-created"]
         indexes = [models.Index(fields=["order", "product"])]
         constraints = [
             models.UniqueConstraint(
@@ -75,7 +81,7 @@ class Order2Product(models.Model):
         ]
 
 
-class Product(models.Model):
+class Product(AbstractModel):
     vendor = models.ForeignKey(
         "auth.User", on_delete=models.CASCADE, related_name="products"
     )
@@ -90,8 +96,6 @@ class Product(models.Model):
         "auth.User", related_name="product_dislikes", blank=True
     )
     title = models.CharField(max_length=100)
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
-    modified = models.DateTimeField(auto_now=True, db_index=True)
     price = models.PositiveIntegerField(db_index=True)
     description = models.TextField(default="", blank=True)
 
@@ -103,7 +107,7 @@ class Product(models.Model):
         ordering = ["-created"]
 
 
-class Review(models.Model):
+class Review(AbstractModel):
     reviewer = models.ForeignKey(
         "auth.User", on_delete=models.CASCADE, related_name="reviews"
     )
@@ -120,8 +124,6 @@ class Review(models.Model):
         db_index=True,
         choices=[(score / 2, score / 2) for score in range(1, 11)],
     )
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
-    modified = models.DateTimeField(auto_now=True, db_index=True)
     description = models.TextField(default="", blank=True)
 
     def __str__(self):
@@ -140,7 +142,7 @@ class Review(models.Model):
         ]
 
 
-class Tag(models.Model):
+class Tag(AbstractModel):
     title = models.CharField(max_length=20, unique=True)
 
     def __str__(self):

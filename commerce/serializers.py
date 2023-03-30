@@ -15,6 +15,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class UserSerializer(HyperlinkedModelSerializer):
+    orders_count = IntegerField(source="orders.count", read_only=True)
     products_count = IntegerField(source="products.count", read_only=True)
     reviews_count = IntegerField(source="reviews.count", read_only=True)
 
@@ -24,6 +25,7 @@ class UserSerializer(HyperlinkedModelSerializer):
             "url",
             "id",
             "carts",
+            "orders_count",
             "orders",
             "products_count",
             "products",
@@ -34,6 +36,7 @@ class UserSerializer(HyperlinkedModelSerializer):
         ]
         read_only_fields = [
             "carts",
+            "orders_count",
             "orders",
             "products_count",
             "products",
@@ -47,7 +50,16 @@ class UserSerializer(HyperlinkedModelSerializer):
 class CartSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Cart
-        fields = ["url", "id", "customer", "product", "created", "quantity"]
+        fields = [
+            "url",
+            "id",
+            "created",
+            "updated",
+            "customer",
+            "product",
+            "quantity",
+        ]
+        read_only_fields = ["created", "updated"]
 
 
 class CategorySerializer(HyperlinkedModelSerializer):
@@ -55,15 +67,30 @@ class CategorySerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = Category
-        fields = ["url", "id", "title", "products_count", "products"]
-        read_only_fields = ["products_count", "products"]
+        fields = [
+            "url",
+            "id",
+            "created",
+            "updated",
+            "title",
+            "products_count",
+            "products",
+        ]
+        read_only_fields = ["created", "updated", "products_count", "products"]
 
 
 class OrderSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Order
-        fields = ["url", "id", "customer", "created", "order2products"]
-        read_only_fields = ["order2products"]
+        fields = [
+            "url",
+            "id",
+            "created",
+            "updated",
+            "customer",
+            "order2products",
+        ]
+        read_only_fields = ["created", "updated", "order2products"]
 
     def create(self, validated_data) -> Order:
         """Creating Order creates Order2Products and deletes Cart.
@@ -84,7 +111,16 @@ class OrderSerializer(HyperlinkedModelSerializer):
 class Order2ProductSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Order2Product
-        fields = ["url", "id", "order", "product", "quantity"]
+        fields = [
+            "url",
+            "id",
+            "created",
+            "updated",
+            "order",
+            "product",
+            "quantity",
+        ]
+        read_only_fields = ["created", "updated"]
 
 
 class ProductSerializer(HyperlinkedModelSerializer):
@@ -96,6 +132,8 @@ class ProductSerializer(HyperlinkedModelSerializer):
         fields = [
             "url",
             "id",
+            "created",
+            "updated",
             "vendor",
             "category",
             "tags",
@@ -104,14 +142,14 @@ class ProductSerializer(HyperlinkedModelSerializer):
             "dislikes",
             "dislikes_count",
             "title",
-            "created",
-            "modified",
             "price",
             "description",
             "order2products",
             "reviews",
         ]
         read_only_fields = [
+            "created",
+            "updated",
             "likes_count",
             "dislikes_count",
             "order2products",
@@ -128,6 +166,8 @@ class ReviewSerializer(HyperlinkedModelSerializer):
         fields = [
             "url",
             "id",
+            "created",
+            "updated",
             "reviewer",
             "product",
             "likes",
@@ -135,11 +175,14 @@ class ReviewSerializer(HyperlinkedModelSerializer):
             "dislikes",
             "dislikes_count",
             "rating",
-            "created",
-            "modified",
             "description",
         ]
-        read_only_fields = ["likes_count", "dislikes_count"]
+        read_only_fields = [
+            "created",
+            "updated",
+            "likes_count",
+            "dislikes_count",
+        ]
 
 
 class TagSerializer(HyperlinkedModelSerializer):
@@ -147,5 +190,13 @@ class TagSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = Tag
-        fields = ["url", "id", "title", "products_count", "products"]
-        read_only_fields = ["products_count", "products"]
+        fields = [
+            "url",
+            "id",
+            "created",
+            "updated",
+            "title",
+            "products_count",
+            "products",
+        ]
+        read_only_fields = ["created", "updated", "products_count", "products"]
