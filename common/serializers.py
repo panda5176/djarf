@@ -26,4 +26,18 @@ class UserSerializer(HyperlinkedModelSerializer):
             "last_login",
             "date_joined",
         ]
-        read_only_fields = ["created", "updated"]
+        read_only_fields = ["created", "updated", "last_login", "date_joined"]
+
+    def create(self, validated_data: dict) -> User:
+        """Creates User with hashed password."""
+        user: User = super().create(validated_data)
+        user.set_password(validated_data["password"])
+        user.save()
+        return user
+
+    def update(self, instance: User, validated_data: dict) -> User:
+        """Updates User with hashed password."""
+        user: User = super().update(instance, validated_data)
+        user.set_password(validated_data["password"])
+        user.save()
+        return user
