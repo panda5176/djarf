@@ -5,7 +5,7 @@ from common.models import User
 LOGGER = logging.getLogger(__name__)
 
 
-class UserSerializer(HyperlinkedModelSerializer):
+class UserAdminSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = [
@@ -17,6 +17,12 @@ class UserSerializer(HyperlinkedModelSerializer):
             "first_name",
             "last_name",
             "email",
+            "password",
+            # "groups",
+            # "user_permissions",
+            "is_staff",
+            "is_active",
+            "is_superuser",
             "last_login",
             "date_joined",
         ]
@@ -37,7 +43,7 @@ class UserSerializer(HyperlinkedModelSerializer):
         return user
 
 
-class UserAdminSerializer(UserSerializer):
+class UserSerializer(UserAdminSerializer):
     class Meta:
         model = User
         fields = [
@@ -49,12 +55,6 @@ class UserAdminSerializer(UserSerializer):
             "first_name",
             "last_name",
             "email",
-            "password",
-            # "groups",
-            # "user_permissions",
-            "is_staff",
-            "is_active",
-            "is_superuser",
             "last_login",
             "date_joined",
         ]

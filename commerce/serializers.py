@@ -154,7 +154,9 @@ class ProductSerializer(HyperlinkedModelSerializer):
         read_only_fields = [
             "created",
             "updated",
+            "likes",
             "likes_count",
+            "dislikes",
             "dislikes_count",
             "order2products",
             "reviews",
@@ -184,7 +186,9 @@ class ReviewSerializer(HyperlinkedModelSerializer):
         read_only_fields = [
             "created",
             "updated",
+            "likes",
             "likes_count",
+            "dislikes",
             "dislikes_count",
         ]
 

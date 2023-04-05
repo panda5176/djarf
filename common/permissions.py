@@ -5,8 +5,7 @@ from common.models import User
 
 
 class IsOwnerOrReadOnly(BasePermission):
-    def has_object_permission(self, request: Request, view: View, object: User):
-        if request.method in SAFE_METHODS:
-            return True
-
-        return object == request.user
+    def has_object_permission(
+        self, request: Request, view: View, object: User
+    ) -> bool:
+        return object == request.user or request.method in SAFE_METHODS

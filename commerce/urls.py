@@ -3,9 +3,12 @@ from rest_framework.routers import DefaultRouter
 from commerce.views import (
     UserViewSet,
     CartViewSet,
+    CartAdminViewSet,
     CategoryViewSet,
     OrderViewSet,
+    OrderAdminViewSet,
     Order2ProductViewSet,
+    Order2ProductAdminViewSet,
     ProductViewSet,
     ReviewViewSet,
     TagViewSet,
@@ -22,6 +25,13 @@ router.register(
 router.register("products", ProductViewSet, basename="product")
 router.register("reviews", ReviewViewSet, basename="review")
 router.register("tags", TagViewSet, basename="tag")
+router.register("carts-admin", CartAdminViewSet, basename="cart_admin")
+router.register("orders-admin", OrderAdminViewSet, basename="order_admin")
+router.register(
+    "order2products-admin",
+    Order2ProductAdminViewSet,
+    basename="order2product_admin",
+)
 
 
 urlpatterns = [

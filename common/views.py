@@ -8,13 +8,12 @@ from common.serializers import UserSerializer, UserAdminSerializer
 LOGGER = logging.getLogger(__name__)
 
 
-class UserViewSet(ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [IsOwnerOrReadOnly]
-
-
 class UserAdminViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserAdminSerializer
     permission_classes = [IsAdminUser]
+
+
+class UserViewSet(UserAdminViewSet):
+    serializer_class = UserSerializer
+    permission_classes = [IsOwnerOrReadOnly]
