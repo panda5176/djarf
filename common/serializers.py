@@ -1,8 +1,5 @@
-import logging
 from rest_framework.serializers import HyperlinkedModelSerializer
 from common.models import User
-
-LOGGER = logging.getLogger(__name__)
 
 
 class UserAdminSerializer(HyperlinkedModelSerializer):

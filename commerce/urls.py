@@ -10,7 +10,9 @@ from commerce.views import (
     Order2ProductViewSet,
     Order2ProductAdminViewSet,
     ProductViewSet,
+    ProductAdminViewSet,
     ReviewViewSet,
+    ReviewAdminViewSet,
     TagViewSet,
 )
 
@@ -32,6 +34,8 @@ router.register(
     Order2ProductAdminViewSet,
     basename="order2product_admin",
 )
+router.register("products-admin", ProductAdminViewSet, basename="product_admin")
+router.register("reviews-admin", ReviewAdminViewSet, basename="review_admin")
 
 
 urlpatterns = [

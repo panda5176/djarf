@@ -1,4 +1,5 @@
 import logging
+from copy import deepcopy
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.request import Request
@@ -22,11 +23,15 @@ from commerce.permissions import (
 from commerce.serializers import (
     UserSerializer,
     CartSerializer,
+    CartAdminSerializer,
     CategorySerializer,
     OrderSerializer,
+    OrderAdminSerializer,
     Order2ProductSerializer,
     ProductSerializer,
+    ProductAdminSerializer,
     ReviewSerializer,
+    ReviewAdminSerializer,
     TagSerializer,
 )
 from common.models import User
@@ -42,12 +47,13 @@ class UserViewSet(ReadOnlyModelViewSet):
 
 class CartAdminViewSet(ModelViewSet):
     queryset = Cart.objects.all()
-    serializer_class = CartSerializer
+    serializer_class = CartAdminSerializer
     permission_classes = [IsAdminUser]
 
 
 class CartViewSet(CartAdminViewSet):
-    permission_classes = [IsCustomer]
+    serializer_class = CartSerializer
+    permission_classes = [IsCustomer or IsAdminUser]
 
     def list(self, request: Request) -> Response:
         """Lists Cart of the customer who is request user."""
@@ -56,9 +62,12 @@ class CartViewSet(CartAdminViewSet):
         else:
             queryset = Cart.objects.filter(customer=request.user)
 
-        serializer = CartSerializer(
-            queryset, many=True, context={"request": request}
-        )
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
@@ -70,12 +79,13 @@ class CategoryViewSet(ModelViewSet):
 
 class OrderAdminViewSet(ModelViewSet):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_class = OrderAdminSerializer
     permission_classes = [IsAdminUser]
 
 
 class OrderViewSet(OrderAdminViewSet):
-    permission_classes = [IsCustomer]
+    serializer_class = OrderSerializer
+    permission_classes = [IsCustomer or IsAdminUser]
 
     def get_queryset(self):
         """Overriding to pass User for request data to Order view."""
@@ -90,9 +100,12 @@ class OrderViewSet(OrderAdminViewSet):
         else:
             queryset = Order.objects.filter(customer=request.user)
 
-        serializer = OrderSerializer(
-            queryset, many=True, context={"request": request}
-        )
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
@@ -103,7 +116,7 @@ class Order2ProductAdminViewSet(ReadOnlyModelViewSet):
 
 
 class Order2ProductViewSet(Order2ProductAdminViewSet):
-    permission_classes = [IsCustomer]
+    permission_classes = [IsCustomer or IsAdminUser]
 
     def list(self, request: Request) -> Response:
         """Lists Order2Product of the customer who is request user."""
@@ -113,23 +126,36 @@ class Order2ProductViewSet(Order2ProductAdminViewSet):
             queryset = Order2Product.objects.filter(
                 order__customer=request.user
             )
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
-        serializer = Order2ProductSerializer(
-            queryset, many=True, context={"request": request}
-        )
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
-class ProductViewSet(ModelViewSet):
+class ProductAdminViewSet(ModelViewSet):
     queryset = Product.objects.all()
+    serializer_class = ProductAdminSerializer
+    permission_classes = [IsAdminUser]
+
+
+class ProductViewSet(ProductAdminViewSet):
     serializer_class = ProductSerializer
-    permission_classes = [IsVendorOrReadOnly]
+    permission_classes = [IsVendorOrReadOnly or IsAdminUser]
 
 
-class ReviewViewSet(ModelViewSet):
+class ReviewAdminViewSet(ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewAdminSerializer
+    permission_classes = [IsAdminUser]
+
+
+class ReviewViewSet(ReviewAdminViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsReviewerOrReadOnly]
+    permission_classes = [IsReviewerOrReadOnly or IsAdminUser]
 
 
 class TagViewSet(ModelViewSet):
