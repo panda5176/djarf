@@ -52,7 +52,9 @@ class UserSerializer(UserAdminSerializer):
             "first_name",
             "last_name",
             "email",
+            "password",
             "last_login",
             "date_joined",
         ]
         read_only_fields = ["created", "updated", "last_login", "date_joined"]
+        write_only_fields = ["password"]

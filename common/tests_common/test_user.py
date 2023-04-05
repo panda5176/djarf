@@ -9,7 +9,8 @@ from common.models import User
 
 class UserTests(APITestCase):
     def setUp(self):
-        _ = User.objects.create(username="user1")
+        user = User.objects.create(username="user1")
+        self.client.force_authenticate(user=user)
 
     def test_list_user(self):
         response = self.client.get("/common/users/", data=None, format="json")
@@ -46,7 +47,7 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(response.data["email"], "mail@mail.mail")
 
-    def test_destroy_product(self):
+    def test_destroy_user(self):
         response = self.client.delete(
             "/common/users/1/", data=None, format="json"
         )

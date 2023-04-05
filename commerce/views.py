@@ -1,5 +1,4 @@
 import logging
-from copy import deepcopy
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.request import Request
@@ -126,6 +125,7 @@ class Order2ProductViewSet(Order2ProductAdminViewSet):
             queryset = Order2Product.objects.filter(
                 order__customer=request.user
             )
+
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
