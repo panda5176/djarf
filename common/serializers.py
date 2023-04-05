@@ -17,12 +17,6 @@ class UserSerializer(HyperlinkedModelSerializer):
             "first_name",
             "last_name",
             "email",
-            "password",
-            "groups",
-            # "user_permissions",
-            "is_staff",
-            "is_active",
-            "is_superuser",
             "last_login",
             "date_joined",
         ]
@@ -41,3 +35,27 @@ class UserSerializer(HyperlinkedModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
+
+
+class UserAdminSerializer(UserSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "url",
+            "id",
+            "created",
+            "updated",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "password",
+            # "groups",
+            # "user_permissions",
+            "is_staff",
+            "is_active",
+            "is_superuser",
+            "last_login",
+            "date_joined",
+        ]
+        read_only_fields = ["created", "updated", "last_login", "date_joined"]
