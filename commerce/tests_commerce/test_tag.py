@@ -5,10 +5,14 @@ from rest_framework.status import (
 )
 from rest_framework.test import APITestCase
 from commerce.models import Tag
+from common.models import User
 
 
 class TagTests(APITestCase):
     def setUp(self):
+        user = User.objects.create(is_staff=True)
+        self.client.force_authenticate(user=user)
+
         _ = Tag.objects.create(title="tag")
 
     def test_list_tag(self):

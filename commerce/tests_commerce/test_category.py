@@ -5,10 +5,14 @@ from rest_framework.status import (
 )
 from rest_framework.test import APITestCase
 from commerce.models import Category
+from common.models import User
 
 
 class CategoryTests(APITestCase):
     def setUp(self):
+        user = User.objects.create(is_staff=True)
+        self.client.force_authenticate(user=user)
+
         _ = Category.objects.create(title="category")
 
     def test_list_category(self):

@@ -12,7 +12,8 @@ class OrderTests(APITestCase):
     def setUp(self):
         user1 = User.objects.create(username="user1")
         user2 = User.objects.create(username="user2")
-        user3 = User.objects.create(username="user3")
+        self.client.force_authenticate(user=user2)
+
         category = Category.objects.create(title="category")
         product1 = Product.objects.create(
             vendor=user1, category=category, title="product1", price=1
@@ -29,8 +30,8 @@ class OrderTests(APITestCase):
             order=order, product=product2, quantity=2
         )
 
-        _ = Cart.objects.create(customer=user3, product=product1, quantity=2)
-        _ = Cart.objects.create(customer=user3, product=product2, quantity=3)
+        _ = Cart.objects.create(customer=user2, product=product1, quantity=2)
+        _ = Cart.objects.create(customer=user2, product=product2, quantity=3)
 
     def test_list_order(self):
         response = self.client.get(
@@ -42,9 +43,7 @@ class OrderTests(APITestCase):
 
     def test_create_order(self):
         response = self.client.post(
-            "/commerce/orders/",
-            data={"customer": "/common/users/3/"},
-            format="json",
+            "/commerce/orders/", data=None, format="json"
         )
 
         self.assertEqual(response.status_code, HTTP_201_CREATED)
@@ -60,18 +59,6 @@ class OrderTests(APITestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(
             response.data["customer"], "http://testserver/common/users/2/"
-        )
-
-    def test_update_order(self):
-        response = self.client.put(
-            "/commerce/orders/1/",
-            data={"customer": "/common/users/3/"},
-            format="json",
-        )
-
-        self.assertEqual(response.status_code, HTTP_200_OK)
-        self.assertEqual(
-            response.data["customer"], "http://testserver/common/users/3/"
         )
 
     def test_destroy_order(self):

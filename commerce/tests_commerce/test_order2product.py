@@ -7,6 +7,8 @@ from common.models import User
 class Order2ProductTests(APITestCase):
     def setUp(self):
         user = User.objects.create()
+        self.client.force_authenticate(user=user)
+
         category = Category.objects.create(title="category")
         order = Order.objects.create(customer=user)
         product = Product.objects.create(

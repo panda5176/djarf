@@ -8,9 +8,11 @@ from commerce.models import Category, Product, Review
 from common.models import User
 
 
-class ProductTests(APITestCase):
+class ReviewTests(APITestCase):
     def setUp(self):
         user = User.objects.create()
+        self.client.force_authenticate(user=user)
+
         category = Category.objects.create(title="category")
         product = Product.objects.create(
             vendor=user, category=category, title="product1", price=1

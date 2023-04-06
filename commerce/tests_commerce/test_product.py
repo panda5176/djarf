@@ -11,6 +11,8 @@ from common.models import User
 class ProductTests(APITestCase):
     def setUp(self):
         user = User.objects.create()
+        self.client.force_authenticate(user=user)
+
         category = Category.objects.create(title="category")
         _ = Product.objects.create(
             vendor=user, category=category, title="product1", price=1

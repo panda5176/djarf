@@ -20,6 +20,8 @@ class IsCustomer(BasePermission):
         view: View,
         object: Union[Cart, Order, Order2Product],
     ) -> bool:
+        if isinstance(object, Order2Product):
+            return object.order.customer == request.user
         return object.customer == request.user
 
 
