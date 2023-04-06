@@ -32,3 +32,4 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ["url", "id", "username", "snippets"]
+        ref_name = "SnippetsUser"  # drf-yasg

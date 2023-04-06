@@ -47,6 +47,7 @@ class UserSerializer(HyperlinkedModelSerializer):
             "reviews",
             "review_likes",
         ]
+        ref_name = "CommerceUser"  # drf-yasg
 
 
 class CartAdminSerializer(HyperlinkedModelSerializer):
