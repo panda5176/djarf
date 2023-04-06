@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework.serializers import HyperlinkedModelSerializer, IntegerField
 from commerce.models import (
     Cart,
@@ -119,15 +120,16 @@ class OrderAdminSerializer(HyperlinkedModelSerializer):
         """Creates Order creating Order2Products and deleting Cart.
 
         Creates Order from customer creating Order2Products from Cart items of \
-            customer and deleting Cart.
+            customer and deleting Cart, in an atomic transaction.
         """
-        order = super().create(validated_data)
-        customer: User = validated_data["customer"]
-        for cart in customer.carts.all():
-            Order2Product.objects.create(
-                order=order, product=cart.product, quantity=cart.quantity
-            )
-            cart.delete()
+        with transaction.atomic():
+            order = super().create(validated_data)
+            customer: User = validated_data["customer"]
+            for cart in customer.carts.all():
+                Order2Product.objects.create(
+                    order=order, product=cart.product, quantity=cart.quantity
+                )
+                cart.delete()
         return order
 
 
