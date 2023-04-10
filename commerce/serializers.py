@@ -13,6 +13,19 @@ from common.models import User
 
 
 class UserSerializer(HyperlinkedModelSerializer):
+    """User serializer.
+
+    Fields
+    ------
+    - `carts` read_only `True`
+    - `orders_count` IntegerField source `orders.count` read_only `True`
+    - `orders` read_only `True`
+    - `products_count` IntegerField source `products.count` read_only `True`
+    - `products` read_only `True`
+    - `reviews_count` IntegerField source `reviews.count` read_only `True`
+    - `reviews` read_only `True`
+    """
+
     orders_count = IntegerField(source="orders.count", read_only=True)
     products_count = IntegerField(source="products.count", read_only=True)
     reviews_count = IntegerField(source="reviews.count", read_only=True)
@@ -47,6 +60,15 @@ class UserSerializer(HyperlinkedModelSerializer):
 
 
 class CartAdminSerializer(HyperlinkedModelSerializer):
+    """Cart serializer for admin.
+
+    Fields
+    ------
+    - `customer`
+    - `product`
+    - `quantity`
+    """
+
     class Meta:
         model = Cart
         fields = [
@@ -62,6 +84,15 @@ class CartAdminSerializer(HyperlinkedModelSerializer):
 
 
 class CartSerializer(CartAdminSerializer):
+    """Cart serializer.
+
+    Fields
+    ------
+    - `customer` read_only `True`
+    - `product`
+    - `quantity`
+    """
+
     class Meta:
         model = Cart
         fields = [
@@ -84,6 +115,15 @@ class CartSerializer(CartAdminSerializer):
 
 
 class CategorySerializer(HyperlinkedModelSerializer):
+    """Category serializer.
+
+    Fields
+    ------
+    - `title`
+    - `products_count` IntegerField source `products.count` read_only `True`
+    - `products` read_only `True`
+    """
+
     products_count = IntegerField(source="products.count", read_only=True)
 
     class Meta:
@@ -101,6 +141,14 @@ class CategorySerializer(HyperlinkedModelSerializer):
 
 
 class OrderAdminSerializer(HyperlinkedModelSerializer):
+    """Order serializer for admin.
+
+    Fields
+    ------
+    - `customer`
+    - `order2products` read_only `True`
+    """
+
     class Meta:
         model = Order
         fields = [
@@ -131,6 +179,14 @@ class OrderAdminSerializer(HyperlinkedModelSerializer):
 
 
 class OrderSerializer(OrderAdminSerializer):
+    """Order serializer.
+
+    Fields
+    ------
+    - `customer` read_only `True`
+    - `order2products` read_only `True`
+    """
+
     class Meta:
         model = Order
         fields = [
@@ -155,6 +211,15 @@ class OrderSerializer(OrderAdminSerializer):
 
 
 class Order2ProductSerializer(HyperlinkedModelSerializer):
+    """Order to Product quantity relationships serializer.
+
+    Fields
+    ------
+    - `order`
+    - `product`
+    - `quantity`
+    """
+
     class Meta:
         model = Order2Product
         fields = [
@@ -170,6 +235,20 @@ class Order2ProductSerializer(HyperlinkedModelSerializer):
 
 
 class ProductAdminSerializer(HyperlinkedModelSerializer):
+    """Product serializer for admin.
+
+    Fields
+    ------
+    - `vendor`
+    - `category`
+    - `tags`
+    - `title`
+    - `price`
+    - `description`
+    - `order2products` read_only `True`
+    - `reviews` read_only `True`
+    """
+
     class Meta:
         model = Product
         fields = [
@@ -190,6 +269,20 @@ class ProductAdminSerializer(HyperlinkedModelSerializer):
 
 
 class ProductSerializer(ProductAdminSerializer):
+    """Product serializer.
+
+    Fields
+    ------
+    - `vendor` read_only `True`
+    - `category`
+    - `tags`
+    - `title`
+    - `price`
+    - `description`
+    - `order2products` read_only `True`
+    - `reviews` read_only `True`
+    """
+
     class Meta:
         model = Product
         fields = [
@@ -223,6 +316,16 @@ class ProductSerializer(ProductAdminSerializer):
 
 
 class ReviewAdminSerializer(HyperlinkedModelSerializer):
+    """Review serializer for admin.
+
+    Fields
+    ------
+    - `reviewer`
+    - `product`
+    - `rating`
+    - `description`
+    """
+
     class Meta:
         model = Review
         fields = [
@@ -239,6 +342,16 @@ class ReviewAdminSerializer(HyperlinkedModelSerializer):
 
 
 class ReviewSerializer(ReviewAdminSerializer):
+    """Review serializer.
+
+    Fields
+    ------
+    - `reviewer` read_only `True`
+    - `product`
+    - `rating`
+    - `description`
+    """
+
     class Meta:
         model = Review
         fields = [
@@ -262,6 +375,15 @@ class ReviewSerializer(ReviewAdminSerializer):
 
 
 class TagSerializer(HyperlinkedModelSerializer):
+    """Tag serializer.
+
+    Fields
+    ------
+    - `title`
+    - `products_count` IntegerField source `products.count` read_only `True`
+    - `products` read_only `True`
+    """
+
     products_count = IntegerField(source="products.count", read_only=True)
 
     class Meta:

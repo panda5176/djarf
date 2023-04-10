@@ -3,6 +3,23 @@ from common.models import AbstractModel
 
 
 class Cart(AbstractModel):
+    """Cart to product quantity model.
+
+    Attributes
+    ----------
+    - `customer` ForeignKey to `common.User`
+    - `product` ForeignKey to `Product`
+    - `quantity` PositiveSmallIntegerField default `1`
+
+    Meta
+    ----
+    - get_latest_by `created`
+    - ordering [`created`]
+    - indexes [`customer`, `product`]
+    - constraints `cart_unique_customer_product` UniqueConstraint \
+        [`customer`, `product`]
+    """
+
     customer = models.ForeignKey(
         "common.User", on_delete=models.CASCADE, related_name="carts"
     )
@@ -29,6 +46,17 @@ class Cart(AbstractModel):
 
 
 class Category(AbstractModel):
+    """Category model.
+
+    Attributes
+    ----------
+    - `title` CharField max_length `20` unique `True`
+
+    Meta
+    ----
+    - ordering [`title`]
+    """
+
     title = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
@@ -39,6 +67,18 @@ class Category(AbstractModel):
 
 
 class Order(AbstractModel):
+    """Order model.
+
+    Attributes
+    ----------
+    - `customer` ForeignKey to `common.User`
+
+    Meta
+    ----
+    - get_latest_by `created`
+    - ordering [`-created`]
+    """
+
     customer = models.ForeignKey(
         "common.User", on_delete=models.CASCADE, related_name="orders"
     )
@@ -52,6 +92,23 @@ class Order(AbstractModel):
 
 
 class Order2Product(AbstractModel):
+    """Order to Product quantity relationships model.
+
+    Attributes
+    ----------
+    - `order` ForeignKey to `Order`
+    - `product` ForeignKey to `Product`
+    - `quantity` PositiveSmallIntegerField default `1`
+
+    Meta
+    ----
+    - get_latest_by `created`
+    - ordering [`-created`]
+    - indexes [`order`, `product`]
+    - constraints `order2product_unique_order_product` UniqueConstraint \
+        [`order`, `product`]
+    """
+
     order = models.ForeignKey(
         "Order", on_delete=models.CASCADE, related_name="order2products"
     )
@@ -64,6 +121,7 @@ class Order2Product(AbstractModel):
         return ", ".join([str(self.order), str(self.product)])
 
     class Meta:
+        get_latest_by = "created"
         ordering = ["-created"]
         indexes = [models.Index(fields=["order", "product"])]
         constraints = [
@@ -75,6 +133,23 @@ class Order2Product(AbstractModel):
 
 
 class Product(AbstractModel):
+    """Product model.
+
+    Attributes
+    ----------
+    - `vendor` ForeignKey to `common.User`
+    - `category` ForeignKey to `Category`
+    - `tags` ManyToManyField to `Tag` blank `True`
+    - `title` CharField max_length `100`
+    - `price` PositiveIntegerField db_index `True`
+    - `description` TextField default `""` blank `True`
+
+    Meta
+    ----
+    - get_latest_by `created`
+    - ordering [`-created`]
+    """
+
     vendor = models.ForeignKey(
         "common.User", on_delete=models.CASCADE, related_name="products"
     )
@@ -95,6 +170,23 @@ class Product(AbstractModel):
 
 
 class Review(AbstractModel):
+    """Review model.
+
+    Attributes
+    ----------
+    - `reviewer` ForeignKey to `common.User`
+    - `product` ForeignKey to `Product`
+    - `rating` FloatField db_index `True` choices `[0.5, 1.0, ..., 5.0]`
+    - `description` TextField default `""` blank `True`
+
+    Meta
+    ----
+    - get_latest_by `created`
+    - ordering [`-created`]
+    - constraints `review_unique_reviewer_product` UniqueConstraint \
+        [`reviewer`, `product`]
+    """
+
     reviewer = models.ForeignKey(
         "common.User", on_delete=models.CASCADE, related_name="reviews"
     )
@@ -124,6 +216,17 @@ class Review(AbstractModel):
 
 
 class Tag(AbstractModel):
+    """Tag model.
+
+    Attributes
+    ----------
+    - `title` CharField max_length `20` unique `True`
+
+    Meta
+    ----
+    - ordering [`title`]
+    """
+
     title = models.CharField(max_length=20, unique=True)
 
     def __str__(self):

@@ -3,6 +3,22 @@ from common.models import User
 
 
 class UserAdminSerializer(HyperlinkedModelSerializer):
+    """User serializer for admin.
+
+    Fields
+    ------
+    - `username`
+    - `first_name`
+    - `last_name`
+    - `email`
+    - `password`
+    - `is_staff`
+    - `is_active`
+    - `is_superuser`
+    - `last_login` read_only `True`
+    - `date_joined` read_only `True`
+    """
+
     class Meta:
         model = User
         fields = [
@@ -41,6 +57,19 @@ class UserAdminSerializer(HyperlinkedModelSerializer):
 
 
 class UserSerializer(UserAdminSerializer):
+    """User serializer.
+
+    Fields
+    ------
+    - `username`
+    - `first_name`
+    - `last_name`
+    - `email`
+    - `password` write_only `True`
+    - `last_login` read_only `True`
+    - `date_joined` read_only `True`
+    """
+
     class Meta:
         model = User
         fields = [
