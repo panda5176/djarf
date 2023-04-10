@@ -82,12 +82,6 @@ class Product(AbstractModel):
         "Category", on_delete=models.CASCADE, related_name="products"
     )
     tags = models.ManyToManyField("Tag", related_name="products", blank=True)
-    likes = models.ManyToManyField(
-        "common.User", related_name="product_likes", blank=True
-    )
-    dislikes = models.ManyToManyField(
-        "common.User", related_name="product_dislikes", blank=True
-    )
     title = models.CharField(max_length=100)
     price = models.PositiveIntegerField(db_index=True)
     description = models.TextField(default="", blank=True)
@@ -106,12 +100,6 @@ class Review(AbstractModel):
     )
     product = models.ForeignKey(
         "Product", on_delete=models.CASCADE, related_name="reviews"
-    )
-    likes = models.ManyToManyField(
-        "common.User", related_name="review_likes", blank=True
-    )
-    dislikes = models.ManyToManyField(
-        "common.User", related_name="review_dislikes", blank=True
     )
     rating = models.FloatField(
         db_index=True,

@@ -29,10 +29,8 @@ class UserSerializer(HyperlinkedModelSerializer):
             "orders",
             "products_count",
             "products",
-            "product_likes",
             "reviews_count",
             "reviews",
-            "review_likes",
         ]
         read_only_fields = [
             "created",
@@ -42,10 +40,8 @@ class UserSerializer(HyperlinkedModelSerializer):
             "orders",
             "products_count",
             "products",
-            "product_likes",
             "reviews_count",
             "reviews",
-            "review_likes",
         ]
         ref_name = "CommerceUser"  # drf-yasg
 
@@ -174,9 +170,6 @@ class Order2ProductSerializer(HyperlinkedModelSerializer):
 
 
 class ProductAdminSerializer(HyperlinkedModelSerializer):
-    likes_count = IntegerField(source="likes.count", read_only=True)
-    dislikes_count = IntegerField(source="dislikes.count", read_only=True)
-
     class Meta:
         model = Product
         fields = [
@@ -187,24 +180,13 @@ class ProductAdminSerializer(HyperlinkedModelSerializer):
             "vendor",
             "category",
             "tags",
-            "likes",
-            "likes_count",
-            "dislikes",
-            "dislikes_count",
             "title",
             "price",
             "description",
             "order2products",
             "reviews",
         ]
-        read_only_fields = [
-            "created",
-            "updated",
-            "likes_count",
-            "dislikes_count",
-            "order2products",
-            "reviews",
-        ]
+        read_only_fields = ["created", "updated", "order2products", "reviews"]
 
 
 class ProductSerializer(ProductAdminSerializer):
@@ -218,10 +200,6 @@ class ProductSerializer(ProductAdminSerializer):
             "vendor",
             "category",
             "tags",
-            "likes",
-            "likes_count",
-            "dislikes",
-            "dislikes_count",
             "title",
             "price",
             "description",
@@ -232,10 +210,6 @@ class ProductSerializer(ProductAdminSerializer):
             "created",
             "updated",
             "vendor",
-            "likes",
-            "likes_count",
-            "dislikes",
-            "dislikes_count",
             "order2products",
             "reviews",
         ]
@@ -249,9 +223,6 @@ class ProductSerializer(ProductAdminSerializer):
 
 
 class ReviewAdminSerializer(HyperlinkedModelSerializer):
-    likes_count = IntegerField(source="likes.count", read_only=True)
-    dislikes_count = IntegerField(source="dislikes.count", read_only=True)
-
     class Meta:
         model = Review
         fields = [
@@ -261,19 +232,10 @@ class ReviewAdminSerializer(HyperlinkedModelSerializer):
             "updated",
             "reviewer",
             "product",
-            "likes",
-            "likes_count",
-            "dislikes",
-            "dislikes_count",
             "rating",
             "description",
         ]
-        read_only_fields = [
-            "created",
-            "updated",
-            "likes_count",
-            "dislikes_count",
-        ]
+        read_only_fields = ["created", "updated"]
 
 
 class ReviewSerializer(ReviewAdminSerializer):
@@ -286,22 +248,10 @@ class ReviewSerializer(ReviewAdminSerializer):
             "updated",
             "reviewer",
             "product",
-            "likes",
-            "likes_count",
-            "dislikes",
-            "dislikes_count",
             "rating",
             "description",
         ]
-        read_only_fields = [
-            "created",
-            "updated",
-            "reviewer",
-            "likes",
-            "likes_count",
-            "dislikes",
-            "dislikes_count",
-        ]
+        read_only_fields = ["created", "updated", "reviewer"]
 
     def create(self, validated_data: dict) -> Review:
         """Creates Review with request user as reviewer."""
