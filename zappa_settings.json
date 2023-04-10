@@ -1,0 +1,10 @@
+{
+    "dev": {
+        "aws_region": "ap-northeast-2",
+        "django_settings": "djarf.settings",
+        "profile_name": "default",
+        "project_name": "djarf",
+        "runtime": "python3.9",
+        "s3_bucket": "zappa-xhieri13t"
+    }
+}
