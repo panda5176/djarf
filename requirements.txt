@@ -3,4 +3,3 @@ djangorestframework>=3.14.0
 drf-yasg>=1.21.5
 httpie>=3.2.1
 Pygments>=2.14.0
-zappa>=0.56.1
