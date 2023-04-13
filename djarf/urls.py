@@ -13,10 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
-from drf_yasg.views import get_schema_view
+from django.views.static import serve
 from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
 from rest_framework.permissions import AllowAny
 
 schema_view = get_schema_view(
@@ -52,5 +54,11 @@ urlpatterns = [
         r"^redoc/$",
         schema_view.with_ui("redoc", cache_timeout=0),
         name="schema-redoc",
+    ),
+    re_path(
+        r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}
+    ),
+    re_path(
+        r"^static/(?P<path>.*)$", serve, {"document_root": settings.STATIC_ROOT}
     ),
 ]
