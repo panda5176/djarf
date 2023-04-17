@@ -1,0 +1,5 @@
+services:
+  djarf:
+    build: .
+    # image: 298796464298.dkr.ecr.ap-northeast-2.amazonaws.com/djarf:latest
+    ports: ["8000:8000"]

@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt
 ENV DJARF_PROD true
 CMD python manage.py collectstatic
 EXPOSE 8000
-ENTRYPOINT python manage.py runserver 0.0.0.0:8000
+ENTRYPOINT gunicorn --bind 0.0.0.0:8000 --workers 8 --threads 8 djarf.wsgi
