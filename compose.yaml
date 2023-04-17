@@ -1,5 +1,11 @@
+version: '3'
 services:
   djarf:
     build: .
-    # image: 298796464298.dkr.ecr.ap-northeast-2.amazonaws.com/djarf:latest
-    ports: ["8000:8000"]
+    image: 298796464298.dkr.ecr.ap-northeast-2.amazonaws.com/djarf:latest
+  server:
+    build: ./nginx
+    image: 298796464298.dkr.ecr.ap-northeast-2.amazonaws.com/djarf-server:latest
+    ports: ["80:80"]
+    depends_on: [djarf]
+    links: [djarf]
