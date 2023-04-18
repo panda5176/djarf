@@ -2,11 +2,11 @@ name: Deployment
 run-name: Deployment of ${{ github.repository }} through AWS ECS
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 jobs:
-  deploy:
+  deployment:
     runs-on: ubuntu-latest
     env:
       ECR_URI: ${{ secrets.ECR_URI }}
