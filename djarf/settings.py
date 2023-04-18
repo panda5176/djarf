@@ -31,6 +31,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 if os.environ.get("DJARF_PROD"):
+    SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
     DEBUG = False
     ALLOWED_HOSTS = ["*"]
     STATIC_ROOT = os.path.join(BASE_DIR, "static")

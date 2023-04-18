@@ -1,11 +1,14 @@
-version: '3'
+version: "3"
 services:
   djarf:
-    build: .
-    image: 298796464298.dkr.ecr.ap-northeast-2.amazonaws.com/djarf:latest
+    build:
+      context: .
+      args:
+        DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+    image: ${ECR_URI}/djarf:latest
   server:
     build: ./nginx
-    image: 298796464298.dkr.ecr.ap-northeast-2.amazonaws.com/djarf-server:latest
+    image: ${ECR_URI}/djarf-server:latest
     ports: ["80:80"]
     depends_on: [djarf]
     links: [djarf]

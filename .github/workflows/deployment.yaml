@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ECR_URI: ${{ secrets.ECR_URI }}
+      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
