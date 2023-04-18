@@ -26,7 +26,7 @@ jobs:
       - name: Transfers authority from AWS ECR to Docker
         run: >
           aws ecr get-login-password |
-           docker login --username AWS --password-stdin $ECR_URI
+          docker login --username AWS --password-stdin $ECR_URI
       - name: Build Docker image with compose
         run: docker compose build
       - name: Push Docker image to AWS ECR with compose
@@ -34,10 +34,10 @@ jobs:
       - name: Install AWS ECS CLI
         run: >
           sudo curl -Lo /usr/local/bin/ecs-cli
-           https://amazon-ecs-cli.s3.amazonaws.com/ecs-cli-linux-amd64-latest
+          https://amazon-ecs-cli.s3.amazonaws.com/ecs-cli-linux-amd64-latest
       - name: Apply execute permissions to ECS CLI binary
         run: sudo chmod +x /usr/local/bin/ecs-cli
       - name: Deploy updating AWS ECS service with AWS CLI
         run: >
           aws ecs update-service --service djarf --task-definition djarf
-           --cluster djarf --force-new-deployment
+          --cluster djarf --force-new-deployment
