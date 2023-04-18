@@ -5,6 +5,6 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 ENV DJARF_PROD true
-CMD python manage.py collectstatic
+RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 ENTRYPOINT gunicorn --bind 0.0.0.0:8000 --workers 8 --threads 8 djarf.wsgi
