@@ -4,11 +4,13 @@ services:
     build:
       context: .
       args:
-        DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
-    image: ${ECR_URI}/djarf:latest
+        DJANGO_SECRET_KEY: ${ DJANGO_SECRET_KEY }
+        DB_PASSWORD: { DB_PASSWORD }
+        DB_HOST: { DB_HOST }
+    image: ${ ECR_URI }/djarf:latest
   server:
     build: ./nginx
-    image: ${ECR_URI}/djarf-server:latest
-    ports: ["80:80"]
-    depends_on: [djarf]
-    links: [djarf]
+    image: ${ ECR_URI }/djarf-server:latest
+    ports: [ "80:80" ]
+    depends_on: [ djarf ]
+    links: [ djarf ]

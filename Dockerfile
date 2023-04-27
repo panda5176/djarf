@@ -7,6 +7,11 @@ RUN pip install -r requirements.txt
 
 ARG DJANGO_SECRET_KEY
 ENV DJANGO_SECRET_KEY $DJANGO_SECRET_KEY
+ARG DB_PASSWORD
+ENV DB_PASSWORD $DB_PASSWORD
+ARG DB_HOST
+ENV DB_HOST $DB_HOST
+
 ENV DJARF_PROD true
 RUN mkdir logs
 RUN python manage.py collectstatic --noinput
