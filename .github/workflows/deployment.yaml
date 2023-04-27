@@ -11,6 +11,8 @@ jobs:
     env:
       ECR_URI: ${{ secrets.ECR_URI }}
       DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_HOST: ${{ secrets.DB_HOST }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
