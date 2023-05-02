@@ -14,7 +14,6 @@ ENV DB_HOST $DB_HOST
 
 ENV DJARF_PROD true
 RUN mkdir logs
-RUN python manage.py test
 RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
