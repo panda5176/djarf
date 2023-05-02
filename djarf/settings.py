@@ -39,6 +39,7 @@ if os.environ.get("DJARF_PROD"):
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "common",
     "commerce",
+    "chat",
     "snippets",
 ]
 
@@ -148,6 +150,8 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "common.User"
+
+ASGI_APPLICATION = "djarf.asgi.application"
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
