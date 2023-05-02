@@ -96,7 +96,7 @@ class CartViewSet(CartAdminViewSet):
     """
 
     serializer_class = CartSerializer
-    permission_classes = [IsAdminUser or IsCustomer]
+    permission_classes = [IsAdminUser | IsCustomer]
 
     def list(self, request: Request) -> Response:
         """Lists Cart of the customer who is request user."""
@@ -167,7 +167,7 @@ class OrderViewSet(OrderAdminViewSet):
     """
 
     serializer_class = OrderSerializer
-    permission_classes = [IsAdminUser or IsCustomer]
+    permission_classes = [IsAdminUser | IsCustomer]
 
     def get_queryset(self):
         """Overriding to pass User for request data to Order view."""
@@ -225,7 +225,7 @@ class Order2ProductViewSet(Order2ProductAdminViewSet):
     - Customer: Create / List / Retrieve / Update / Destroy
     """
 
-    permission_classes = [IsAdminUser or IsCustomer]
+    permission_classes = [IsAdminUser | IsCustomer]
 
     def list(self, request: Request) -> Response:
         """Lists Order2Product of the customer who is request user."""
@@ -291,7 +291,7 @@ class ProductViewSet(ProductAdminViewSet):
     """
 
     serializer_class = ProductSerializer
-    permission_classes = [IsAdminUser or IsVendorOrReadOnly]
+    permission_classes = [IsAdminUser | IsVendorOrReadOnly]
 
 
 class ReviewAdminViewSet(ModelViewSet):
@@ -333,7 +333,7 @@ class ReviewViewSet(ReviewAdminViewSet):
 
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsAdminUser or IsReviewerOrReadOnly]
+    permission_classes = [IsAdminUser | IsReviewerOrReadOnly]
 
 
 class TagViewSet(ModelViewSet):
